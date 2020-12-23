@@ -1,0 +1,10 @@
+{
+    "name"     : "test palette",
+    "author"   : "DataDrake",
+    "date"     : "2020-12-22T18:41:00.00Z",
+    "revision" : 1,
+    "colors"   : [
+        "000000FF",
+        "00FF00FF"
+    ]
+}
