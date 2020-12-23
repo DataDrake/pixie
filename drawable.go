@@ -11,6 +11,7 @@ type Drawable interface {
 	Draw(screen *ebiten.Image)
 	SetPosition(x, y int)
 	SetSize(sx, sy int)
+	PreferredSize() (sx, sy int)
 	SetVisible(visible bool)
 	Update() error
 }

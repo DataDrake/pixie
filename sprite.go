@@ -16,10 +16,8 @@ type Sprite struct {
 	colors  *color.Palette
 }
 
-func NewSprite(x, y, size, scale int, colors *color.Palette) *Sprite {
+func NewSprite(size, scale int, colors *color.Palette) *Sprite {
 	s := &Sprite{
-		x:       x,
-		y:       y,
 		size:    size,
 		scale:   scale,
 		visible: true,
@@ -52,11 +50,16 @@ func (s *Sprite) SetSize(sx, sy int) {
 	if sx != sy {
 		panic(fmt.Sprintf("Sprites must have square dimensions, %d != %d", sx, sy))
 	}
-	s.size = sx
+	s.size = sx / s.scale
 }
 
-func (s *Sprite) Swap(img *ebiten.Image) {
-    s.img = img
+func (s *Sprite) PreferredSize() (int, int) {
+	return s.size * s.scale, s.size * s.scale
+}
+
+func (s *Sprite) Swap(img *ebiten.Image) (prev *ebiten.Image) {
+	prev, s.img = s.img, img
+	return
 }
 
 func (s *Sprite) SetVisible(visible bool) {

@@ -8,7 +8,6 @@ import (
 
 type Box struct {
 	x, y    int
-	sx, sy  int
 	margin  int
 	padding int
 	visible bool
@@ -16,21 +15,19 @@ type Box struct {
 	child   Drawable
 }
 
-func NewBox(x, y, sx, sy int, child Drawable) *Box {
+func NewBox(child Drawable) *Box {
 	b := &Box{
-		margin:  0,
-		padding: 0,
 		visible: true,
-		border:  NewRectangle(x, y, sx, sy),
+		border:  NewRectangle(child.PreferredSize()),
 		child:   child,
 	}
-	b.SetPosition(x, y)
-	b.SetSize(sx, sy)
+	b.SetSize(child.PreferredSize())
 	return b
 }
 
 func (b *Box) Bounds() image.Rectangle {
-	return image.Rect(b.x, b.y, b.x+b.sx, b.y+b.sy)
+	sx, sy := b.PreferredSize()
+	return image.Rect(b.x, b.y, b.x+sx, b.y+sy)
 }
 
 func (b *Box) Draw(screen *ebiten.Image) {
@@ -48,7 +45,7 @@ func (b *Box) SetMargin(margin int) {
 	}
 	b.margin = margin
 	b.SetPosition(b.x, b.y)
-	b.SetSize(b.sx, b.sy)
+	b.SetSize(b.child.PreferredSize())
 }
 
 func (b *Box) SetPadding(padding int) {
@@ -57,7 +54,7 @@ func (b *Box) SetPadding(padding int) {
 	}
 	b.padding = padding
 	b.SetPosition(b.x, b.y)
-	b.SetSize(b.sx, b.sy)
+	b.SetSize(b.child.PreferredSize())
 }
 
 func (b *Box) SetPosition(x, y int) {
@@ -69,13 +66,16 @@ func (b *Box) SetPosition(x, y int) {
 func (b *Box) SetSize(sx, sy int) {
 	if sx <= 0 || sy <= 0 {
 		b.SetVisible(false)
-		b.sx, b.sy = 0, 0
 		b.child.SetSize(0, 0)
 		return
 	}
-	b.sx, b.sy = sx, sy
-	b.border.SetSize(sx-(2*b.margin), sy-(2*b.margin))
-	b.child.SetSize(sx-(2*b.margin)-(2*b.padding), sy-(2*b.margin)-(2*b.padding))
+	b.border.SetSize((2*b.padding)+sx, (2*b.padding)+sy)
+	b.child.SetSize(sx, sy)
+}
+
+func (b *Box) PreferredSize() (int, int) {
+	cx, cy := b.child.PreferredSize()
+	return (2 * (b.margin + b.padding)) + cx, (2 * (b.margin + b.padding)) + cy
 }
 
 func (b *Box) SetVisible(visible bool) {

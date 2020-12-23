@@ -13,12 +13,11 @@ type Rectangle struct {
 	img     *ebiten.Image
 }
 
-func NewRectangle(x, y, sx, sy int) *Rectangle {
+func NewRectangle(sx, sy int) *Rectangle {
 	r := &Rectangle{
 		visible: true,
 		img:     ebiten.NewImage(1, 1),
 	}
-	r.SetPosition(x, y)
 	r.SetSize(sx, sy)
 	return r
 }
@@ -28,10 +27,12 @@ func (r *Rectangle) Bounds() image.Rectangle {
 }
 
 func (r *Rectangle) Draw(screen *ebiten.Image) {
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(float64(r.sx), float64(r.sy))
-	op.GeoM.Translate(float64(r.x), float64(r.y))
-	screen.DrawImage(r.img, op)
+	if r.visible {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Scale(float64(r.sx), float64(r.sy))
+		op.GeoM.Translate(float64(r.x), float64(r.y))
+		screen.DrawImage(r.img, op)
+	}
 }
 
 func (r *Rectangle) SetColor(c color.Color) {
@@ -49,6 +50,10 @@ func (r *Rectangle) SetSize(sx, sy int) {
 		return
 	}
 	r.sx, r.sy = sx, sy
+}
+
+func (r *Rectangle) PreferredSize() (int, int) {
+	return r.sx, r.sy
 }
 
 func (r *Rectangle) SetVisible(visible bool) {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-    "github.com/DataDrake/pixie/encoding"
+	"github.com/DataDrake/pixie/encoding"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
@@ -24,55 +24,59 @@ type Game struct {
 }
 
 func NewGame() *Game {
-    pl, err := encoding.LoadPalette("examples/palette.json")
-    if err != nil {
-        panic(err)
-    }
-    pl.Describe()
-    println()
-    palette := color.Palette(pl.Colors)
+	pl, err := encoding.LoadPalette("examples/palette.json")
+	if err != nil {
+		panic(err)
+	}
+	pl.Describe()
+	println()
+	palette := color.Palette(pl.Colors)
 
-	s := NewSprite(88, 8, 16, 16, &palette)
-	editor := NewBox(88, 8, 260, 260, s)
+	s := NewSprite(16, 16, &palette)
+	editor := NewBox(s)
 	editor.SetBorder(color.Gray{0x77})
 	editor.SetMargin(1)
 	editor.SetPadding(1)
+	editor.SetPosition(88, 8)
 
-    ss, err := encoding.LoadSpriteSet("examples/sprite_set.json")
-    if err != nil {
-        panic(err)
-    }
-    ss.Describe()
-    ss.ChangePalette(&palette)
-    s.Swap(ss.Sprites[0].Convert())
+	ss, err := encoding.LoadSpriteSet("examples/sprite_set.json")
+	if err != nil {
+		panic(err)
+	}
+	ss.Describe()
+	ss.ChangePalette(&palette)
+	s.Swap(ss.Sprites[0].Convert())
 
-	p := NewSprite(30, 226, 16, 2, &palette)
+	p := NewSprite(16, 2, &palette)
 	p.img = s.img
-	preview := NewBox(30, 226, 36, 36, p)
+	preview := NewBox(p)
 	preview.SetBorder(color.Gray{0x77})
 	preview.SetMargin(1)
 	preview.SetPadding(1)
+	preview.SetPosition(30, 226)
 
 	var grid []*Box
 	for j := 0; j < 4; j++ {
 		for i := 0; i < 2; i++ {
-			sp := NewSprite(8+j*20, 8+i*20, 16, 1, &palette)
+			sp := NewSprite(16, 1, &palette)
 			sp.img = s.img
-			sb := NewBox(8+j*20, 8+i*20, 20, 20, sp)
+			sb := NewBox(sp)
 			sb.SetBorder(color.Gray{0x77})
 			sb.SetMargin(1)
 			sb.SetPadding(1)
+			sb.SetPosition(8+j*20, 8+i*20)
 			grid = append(grid, sb)
 		}
 	}
 	for j := 0; j < 4; j++ {
 		for i := 0; i < 8; i++ {
-			sp := NewSprite(8+j*20, 58+i*20, 16, 1, &palette)
+			sp := NewSprite(16, 1, &palette)
 			sp.img = s.img
-			sb := NewBox(8+j*20, 58+i*20, 20, 20, sp)
+			sb := NewBox(sp)
 			sb.SetBorder(color.Gray{0x77})
 			sb.SetMargin(1)
 			sb.SetPadding(1)
+			sb.SetPosition(8+j*20, 58+i*20)
 			grid = append(grid, sb)
 		}
 	}

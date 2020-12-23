@@ -1,5 +1,17 @@
 # TODO
 
+## Serialization
+
+**Sprites**
+
+- [x] Load Sprite Set from JSON
+- [ ] Save Sprite Set to JSON
+
+**Palettes**
+
+- [x] Load Palette from JSON
+- [ ] Save Palette to JSON
+
 ## Data Sharing
 
 **Sprites**

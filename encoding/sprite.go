@@ -5,7 +5,6 @@ import (
     "encoding/json"
     "github.com/hajimehoshi/ebiten/v2"
     "image"
-    "image/color"
     "os"
 )
 
@@ -26,10 +25,6 @@ func LoadSprite(path string) (s Sprite, err error) {
     defer f.Close()
     dec := json.NewDecoder(f)
     err = dec.Decode(&s)
-    s.img.Palette = []color.Color {
-        color.RGBA{0x00,0x00,0x00,0xFF},
-        color.RGBA{0xFF,0x00,0x00,0xFF},
-    }
     return
 }
 
