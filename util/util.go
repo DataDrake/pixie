@@ -1,11 +1,11 @@
-package main
+package util
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 )
 
-func getPressed() (keys []ebiten.Key) {
+func GetPressed() (keys []ebiten.Key) {
 	for k := ebiten.Key(0); k <= ebiten.KeyMax; k++ {
 		if ebiten.IsKeyPressed(k) {
 			keys = append(keys, k)

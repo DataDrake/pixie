@@ -1,7 +1,8 @@
-package main
+package ui
 
 import (
 	"fmt"
+	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -68,7 +69,7 @@ func (s *Sprite) SetVisible(visible bool) {
 
 func (s *Sprite) Update() error {
 	cx, cy := ebiten.CursorPosition()
-	if !In(s.Bounds(), cx, cy) {
+	if !util.In(s.Bounds(), cx, cy) {
 		return nil
 	}
 	cx, cy = (cx-s.x)/s.scale, (cy-s.y)/s.scale

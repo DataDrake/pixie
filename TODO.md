@@ -1,5 +1,14 @@
 # TODO
 
+## General
+
+- [ ] Add Grid type for 2D grids of items
+- [x] Keyboard handling
+- [ ] Add Button type for sending signals to other UI elements
+- [ ] Switching Sprites using Selector
+- [ ] Color picker
+- [ ] Animated loading screen with gameboy inspired start-up sound
+
 ## Serialization
 
 **Sprites**
