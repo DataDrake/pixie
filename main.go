@@ -57,13 +57,20 @@ func NewGame() *Game {
 	ss.Describe()
 	ss.ChangePalette(&palette)
 
+	tbss, err := encoding.LoadSpriteSet("examples/sprite_toolbar.json")
+	if err != nil {
+		panic(err)
+	}
+	tbss.Describe()
+	tbss.ChangePalette(&palette)
+
 	s := ui.NewSprite(16, 16, &palette)
 	s.Swap(ss.Sprites[0].Convert())
 
 	return &Game{
 		editor:  ui.NewEditor(88, 8, s),
 		preview: ui.NewPreview(30, 226, s, &palette),
-		toolbar: ui.NewToolbar(8, 8, s, &palette),
+		toolbar: ui.NewToolbar(8, 8, &tbss, &palette),
 		sprites: ui.NewSelector(8, 58, s, &palette),
 		colors:  ui.NewSelector(348, 58, s, &palette),
 		last:    time.Now(),

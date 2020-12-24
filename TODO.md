@@ -2,8 +2,9 @@
 
 ## General
 
-- [ ] Add Grid type for 2D grids of items
+- [x] Add Grid type for 2D grids of items
 - [x] Keyboard handling
+- [x] Prototype icons for toolbar 
 - [ ] Add Button type for sending signals to other UI elements
 - [ ] Switching Sprites using Selector
 - [ ] Color picker
