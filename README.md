@@ -5,7 +5,7 @@
 
 ## Motivation
 
-In preparation for a future Ludum Dare, I wanted a Pixel editor for doing Sprite design, animation, and tiling. I could have used a paid product, but decided this would be a good opportunity to learn the (Ebiten)[https://ebiten.org/] game library, practice 2D UI design, and build my own tools. Thus, Pixie was born.
+In preparation for a future Ludum Dare, I wanted a Pixel editor for doing Sprite design, animation, and tiling. I could have used a paid product, but decided this would be a good opportunity to learn the [Ebiten](https://ebiten.org/) game library, practice 2D UI design, and build my own tools. Thus, Pixie was born.
 
 ## Goals
 
