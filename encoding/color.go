@@ -1,3 +1,19 @@
+//
+// Copyright 2021 Bryan T. Meyers <root@datadrake.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package encoding
 
 import (
@@ -24,12 +40,12 @@ func (cj colorJSON) Color() color.Color {
 	}
 }
 
-func (c colorJSON) MarshalJSON() ([]byte, error) {
-	s := hex.EncodeToString([]byte(c))
+func (cj colorJSON) MarshalJSON() ([]byte, error) {
+	s := hex.EncodeToString([]byte(cj))
 	return json.Marshal(s)
 }
 
-func (c *colorJSON) UnmarshalJSON(bs []byte) error {
+func (cj *colorJSON) UnmarshalJSON(bs []byte) error {
 	var s string
 	if err := json.Unmarshal(bs, &s); err != nil {
 		return err
@@ -38,6 +54,6 @@ func (c *colorJSON) UnmarshalJSON(bs []byte) error {
 	if err != nil {
 		return err
 	}
-	*c = colorJSON(raw)
+	*cj = colorJSON(raw)
 	return nil
 }

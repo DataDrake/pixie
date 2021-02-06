@@ -14,24 +14,26 @@
 // limitations under the License.
 //
 
-package util
+package assets
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"image"
+	"path/filepath"
 )
 
-// GetPressed returns a list of all the pressed keys
-func GetPressed() (keys []ebiten.Key) {
-	for k := ebiten.Key(0); k <= ebiten.KeyMax; k++ {
-		if ebiten.IsKeyPressed(k) {
-			keys = append(keys, k)
-		}
-	}
-	return
+// DataDir is the shared data directory for Pixie's assets
+var DataDir string
+
+// DefaultPalette is the location of the default palette to load when opening Pixie
+func DefaultPalette() string {
+	return filepath.Join(DataDir, "defaults", "palette.json")
 }
 
-// In checks if an XY coordinate is inside of a bounding box
-func In(r image.Rectangle, x, y int) bool {
-	return image.Rect(x, y, x+1, y+1).In(r)
+// DefaultSprites are the "starter" sprites to load when opening Pixie
+func DefaultSprites() string {
+	return filepath.Join(DataDir, "defaults", "sprites.json")
+}
+
+// DefaultToolbarIcons are the icons to use for the toolbar in the sprite editor
+func DefaultToolbarIcons() string {
+	return filepath.Join(DataDir, "defaults", "sprite_toolbar.json")
 }

@@ -4,7 +4,8 @@
 
 - [x] Add Grid type for 2D grids of items
 - [x] Keyboard handling
-- [x] Prototype icons for toolbar 
+- [x] Prototype icons for toolbar
+- [x] Load color palette from a file and populating the selector
 - [ ] Add Button type for sending signals to other UI elements
 - [ ] Switching Sprites using Selector
 - [ ] Color picker

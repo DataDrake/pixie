@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pixie
+Comment=Pixel Interactive Editor
+Exec=pixie
+Terminal=false
+Type=Application
+Icon=pixie
+Categories=Graphics;
