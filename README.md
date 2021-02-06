@@ -5,10 +5,17 @@
 
 ## Motivation
 
+In preparation for a future Ludum Dare, I wanted a Pixel editor for doing Sprite design, animation, and tiling. I could have used a paid product, but decided this would be a good opportunity to learn the (Ebiten)[https://ebiten.org/] game library, practice 2D UI design, and build my own tools. Thus, Pixie was born.
 
 ## Goals
 
- * Spin up and down as fast as reasonable
+ * Multiple Editors:
+   * Sprites
+   * Palettes
+   * Sprite Animation
+   * Map Tiling
+ * Use a JSON format for all files
+ * Be as easy to use as possible
  * A+ Rating on [Report Card](https://goreportcard.com/report/github.com/DataDrake/pixie)
  
 ## Screenshots
