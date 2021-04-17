@@ -17,6 +17,7 @@
 package ui
 
 import (
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -28,9 +29,10 @@ type Editor struct {
 }
 
 // NewEditor creates an Editor at the desired location for the specified Sprite
-func NewEditor(x, y int, sprite *Sprite) *Editor {
+func NewEditor(x, y int, s *model.Sprite) *Editor {
 	var ed Editor
-	ed.box = NewBox(sprite)
+	sp := NewSprite(s, true, 16)
+	ed.box = NewBox(sp)
 	ed.box.SetBorder(color.Gray{0x77})
 	ed.box.SetMargin(1)
 	ed.box.SetPadding(1)

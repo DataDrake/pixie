@@ -18,32 +18,37 @@ package ui
 
 import (
 	"fmt"
+	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
-	"image/color"
 )
 
 // Sprite represents a square sprite of pixels
 type Sprite struct {
-	x, y    int
-	size    int
-	scale   int
-	visible bool
-	img     *ebiten.Image
-	colors  *color.Palette
+	x, y     int
+	size     int
+	scale    int
+	visible  bool
+	selected Selected
+	writable bool
+	src      *model.Sprite
+	img      *ebiten.Image
 }
 
 // NewSprite creates a new empty Sprite of the specified size, scale (multiplier), and color Palette
-func NewSprite(size, scale int, colors *color.Palette) *Sprite {
+func NewSprite(img *model.Sprite, writable bool, scale int) *Sprite {
+	size := img.Bounds().Dx()
 	s := &Sprite{
-		size:    size,
-		scale:   scale,
-		visible: true,
-		img:     ebiten.NewImage(size, size),
-		colors:  colors,
+		size:     size,
+		scale:    scale,
+		visible:  true,
+		writable: writable,
+		src:      img,
+		img:      ebiten.NewImage(size, size),
 	}
-	s.img.Fill((*s.colors)[0])
+	_, bg := img.Palette().BG()
+	s.img.Fill(bg)
 	return s
 }
 
@@ -82,8 +87,9 @@ func (s *Sprite) PreferredSize() (int, int) {
 }
 
 // Swap changes out the Image for this sprite with another
-func (s *Sprite) Swap(img *ebiten.Image) (prev *ebiten.Image) {
-	prev, s.img = s.img, img
+func (s *Sprite) Swap(src *model.Sprite) (prev *model.Sprite) {
+	prev, s.src = s.src, src
+	s.img = ebiten.NewImageFromImage(s.src.Image())
 	return
 }
 
@@ -94,16 +100,25 @@ func (s *Sprite) SetVisible(visible bool) {
 
 // Update detects a mouse click inside a sprite, changing the color according to the button pressed
 func (s *Sprite) Update() error {
+	s.selected = UnSelected
 	cx, cy := ebiten.CursorPosition()
-	if !util.In(s.Bounds(), cx, cy) {
-		return nil
+	if util.In(s.Bounds(), cx, cy) {
+		cx, cy = (cx-s.x)/s.scale, (cy-s.y)/s.scale
+		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+			if s.writable {
+				s.src.SetFG(cx, cy)
+			}
+			s.selected = LeftSelect
+		}
+		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
+			if s.writable {
+				s.src.SetBG(cx, cy)
+			}
+			s.selected = RightSelect
+		}
 	}
-	cx, cy = (cx-s.x)/s.scale, (cy-s.y)/s.scale
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		s.img.Set(cx, cy, (*s.colors)[1])
-	}
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
-		s.img.Set(cx, cy, (*s.colors)[0])
+	if s.src.HasChanged() {
+		s.img = ebiten.NewImageFromImage(s.src.Image())
 	}
 	return nil
 }

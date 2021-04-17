@@ -18,7 +18,7 @@ package ui
 
 import (
 	"fmt"
-	//"github.com/DataDrake/pixie/util"
+	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -26,11 +26,12 @@ import (
 
 // Swatch is a color swatch
 type Swatch struct {
-	x, y    int
-	size    int
-	visible bool
-	img     *ebiten.Image
-	color   color.Color
+	x, y     int
+	size     int
+	visible  bool
+	selected Selected
+	img      *ebiten.Image
+	color    color.Color
 }
 
 // NewSwatch creates a Swatch of the specified color
@@ -93,18 +94,16 @@ func (s *Swatch) SetVisible(visible bool) {
 
 // Update checks for a mouse click inside the swatch (NOT IMPLEMENTED)
 func (s *Swatch) Update() error {
-	/*
-		cx, cy := ebiten.CursorPosition()
-		if !util.In(s.Bounds(), cx, cy) {
-			return nil
-		}
-		cx, cy = (cx-s.x)/s.scale, (cy-s.y)/s.scale
-		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-			s.img.Set(cx, cy, (*s.colors)[1])
-		}
-		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
-			s.img.Set(cx, cy, (*s.colors)[0])
-		}
-	*/
+	cx, cy := ebiten.CursorPosition()
+	if !util.In(s.Bounds(), cx, cy) {
+		s.selected = UnSelected
+		return nil
+	}
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+		s.selected = LeftSelect
+	}
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
+		s.selected = RightSelect
+	}
 	return nil
 }

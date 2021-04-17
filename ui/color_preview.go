@@ -17,6 +17,7 @@
 package ui
 
 import (
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -24,22 +25,27 @@ import (
 
 // ColorPreview displays the currently selected FG and BG colors
 type ColorPreview struct {
-	x, y int
-	fg   *Box
-	bg   *Box
+	x, y    int
+	fg      *Box
+	bg      *Box
+	palette *model.Palette
 }
 
 // NewColorPreview creates a new ColorPreview with the specified size and colors
-func NewColorPreview(x, y int, fg, bg color.Color) *ColorPreview {
+func NewColorPreview(x, y int, palette *model.Palette) *ColorPreview {
 	prev := &ColorPreview{
-		x: x,
-		y: y,
+		x:       x,
+		y:       y,
+		palette: palette,
 	}
+
+	_, fg := palette.FG()
 	fgS := NewSwatch(16, fg)
 	prev.fg = NewBox(fgS)
 	prev.fg.SetBorder(color.Gray{0x77})
 	prev.fg.SetPadding(1)
 
+	_, bg := palette.BG()
 	bgS := NewSwatch(16, bg)
 	prev.bg = NewBox(bgS)
 	prev.bg.SetBorder(color.Gray{0x77})
@@ -87,6 +93,12 @@ func (p *ColorPreview) SetVisible(visible bool) {
 
 // Update calls Update for the FG and BG swatches
 func (p *ColorPreview) Update() error {
+	if p.palette.HasChanged() {
+		_, fg := p.palette.FG()
+		_, bg := p.palette.BG()
+		p.fg.child.(*Swatch).Swap(fg)
+		p.bg.child.(*Swatch).Swap(bg)
+	}
 	if err := p.fg.Update(); err != nil {
 		return err
 	}

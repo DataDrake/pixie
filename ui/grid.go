@@ -116,3 +116,8 @@ func (g *Grid) Update() error {
 	}
 	return nil
 }
+
+// Clear removes all the children
+func (g *Grid) Clear() {
+	g.children = make([]Drawable, 0)
+}

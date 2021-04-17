@@ -18,13 +18,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/DataDrake/pixie/assets"
-	"github.com/DataDrake/pixie/encoding"
+	"github.com/DataDrake/pixie/editor"
 	"github.com/DataDrake/pixie/input"
-	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
 	_ "image/png"
 	"log"
 	"os"
@@ -38,19 +35,10 @@ const (
 
 // Pixie is the global Pixie object
 type Pixie struct {
-	editor   *ui.Editor
-	preview  *ui.Preview
-	toolbar  *ui.Toolbar
-	sprites  *ui.Selector
-	colors   *ui.Palette
-	cPreview *ui.ColorPreview
-	grid     []*ui.Box
+	editors  [editor.Max]editor.Editor
+	current  editor.Kind
 	last     time.Time
-}
-
-// Quit is called to terminate the program
-func Quit(input.KeyEvent) {
-	os.Exit(0)
+	quitting bool
 }
 
 // QuitEvent listens for CTRL+Q to be pressed
@@ -62,59 +50,46 @@ var QuitEvent = input.KeyEvent{
 
 // NewPixie creates a new Pixie object and populates the GUI
 func NewPixie() *Pixie {
-	input.Register(QuitEvent, Quit)
-
-	pl, err := encoding.LoadPalette(assets.DefaultPalette())
-	if err != nil {
-		panic(err)
+	// Build Editors
+	var editors [editor.Max]editor.Editor
+	editors[editor.SpriteKind] = editor.NewSprite()
+	// Build Pixie
+	p := &Pixie{
+		editors: editors,
+		current: editor.SpriteKind,
+		last:    time.Now(),
 	}
-	pl.Describe()
-	println()
-	palette := color.Palette(pl.Colors)
-
-	ss, err := encoding.LoadSpriteSet(assets.DefaultSprites())
-	if err != nil {
-		panic(err)
-	}
-	ss.Describe()
-	ss.ChangePalette(&palette)
-
-	tbss, err := encoding.LoadSpriteSet(assets.DefaultToolbarIcons())
-	if err != nil {
-		panic(err)
-	}
-	tbss.Describe()
-	tbss.ChangePalette(&palette)
-
-	s := ui.NewSprite(16, 16, &palette)
-	s.Swap(ss.Sprites[0].Convert())
-
-	return &Pixie{
-		editor:   ui.NewEditor(88, 8, s),
-		preview:  ui.NewPreview(30, 226, s, &palette),
-		toolbar:  ui.NewToolbar(8, 8, &tbss, &palette),
-		sprites:  ui.NewSelector(8, 58, s, &palette),
-		colors:   ui.NewPalette(348, 58, &palette),
-		cPreview: ui.NewColorPreview(371, 222, palette[1], palette[0]),
-		last:     time.Now(),
-	}
+	// Register the quit event
+	input.Register(QuitEvent, func(_ input.KeyEvent) {
+		p.quitting = true
+		p.current = editor.SpriteKind
+	})
+	return p
 }
 
 // Update checks for all updates in the input and the internal state of Pixie
 func (p *Pixie) Update() error {
 	p.last = time.Now()
 	input.Update()
-	return p.editor.Update()
+	if p.quitting {
+		done, err := p.editors[p.current].Exit()
+		if err != nil {
+			return err
+		}
+		if done {
+			p.current++
+		}
+		if p.current == editor.Max {
+			os.Exit(0)
+		}
+		return nil
+	}
+	return p.editors[p.current].Update()
 }
 
 // Draw renders Pixie to a screen
 func (p *Pixie) Draw(screen *ebiten.Image) {
-	p.editor.Draw(screen)
-	p.preview.Draw(screen)
-	p.toolbar.Draw(screen)
-	p.sprites.Draw(screen)
-	p.colors.Draw(screen)
-	p.cPreview.Draw(screen)
+	p.editors[p.current].Draw(screen)
 	elapsed := time.Now().Sub(p.last)
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Time: %0.3fms", elapsed.Seconds()*1000), 8, 300)
 }

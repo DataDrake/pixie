@@ -17,6 +17,7 @@
 package ui
 
 import (
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -28,12 +29,11 @@ type Selector struct {
 }
 
 // NewSelector creates a Selector for the provided SpriteSet with the specified Palette
-func NewSelector(x, y int, s *Sprite, palette *color.Palette) *Selector {
+func NewSelector(x, y int, ss model.SpriteSet) *Selector {
 	// TODO: Switch to using SpriteSet instead of a repeated sprite
 	grid := NewGrid(8, 4)
-	for j := 0; j < 34; j++ {
-		sp := NewSprite(16, 1, palette)
-		sp.img = s.img
+	for _, s := range ss {
+		sp := NewSprite(s, false, 1)
 		sb := NewBox(sp)
 		sb.SetBorder(color.Gray{0x77})
 		sb.SetMargin(1)

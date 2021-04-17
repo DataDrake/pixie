@@ -1,11 +1,50 @@
 # TODO
 
+## Ludum Dare Priorities
+
+- [x] Clean up editor code
+    - [x] Separating Editors from Pixie
+    - [x] Allow Editors to be switched
+    - [x] Added Exit() functionability for Editors to allow saving
+- [x] Switch Colors
+    - [x] Switch ColorPreview to using model.Palette
+    - [x] Switch Palette to using model.Palette
+    - [x] Switch Sprite to using model.Palette
+    - [x] Switch Selector to using model.Palette
+    - [x] Add click detection to Swatches and ui.Palette (update model.Palette)
+- [x] Switch Sprites and Sprite Sets
+    - [x] Switch Editor to using a model.Sprite
+    - [x] Switch Toolbar to using a model.SpriteSet
+    - [x] Switch Preview to using a model.Sprite
+    - [x] Switch Selector to using a model.SpriteSet
+- [ ] Modify Sprite Sets
+    - [ ] Add Sprite
+    - [ ] Remove Sprite
+    - [ ] Select Sprite
+    - [ ] Reorder Sprites
+
+- [ ] Toolbar
+    - [ ] Working Save function
+- [ ] Load Sprite-Set from os.Args[1]
+- [ ] Embed assets using embed.FS for the UI
+    - [ ] Toolbar sprites
+    - [ ] Fonts
+    - [ ] Default Palettes
+
+- [ ] Are you sure?
+    - [ ] Modal Dialog
+    - [ ] Translucent Overlay
+
+- [ ] Encode Sprites as a Bitmap-like format
+    - [ ] Custom image.Image types
+        - [ ] 1-bit per pixel (2 colors)
+        - [ ] 2-bit per pixel (4 colors)
+        - [ ] 4-bit per pixel (16 colors)
+        - [ ] 8-bit per pixel (256 colors) (existing sprite encoding)
+    - [ ] Update Sprite Set to support optimal sizes
+
 ## General
 
-- [x] Add Grid type for 2D grids of items
-- [x] Keyboard handling
-- [x] Prototype icons for toolbar
-- [x] Load color palette from a file and populating the selector
 - [ ] Add Button type for sending signals to other UI elements
 - [ ] Switching Sprites using Selector
 - [ ] Color picker

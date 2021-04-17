@@ -17,6 +17,7 @@
 package ui
 
 import (
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -24,23 +25,20 @@ import (
 
 // Palette is a color picker for a Palette of colors
 type Palette struct {
-	grid *Grid
+	x, y   int
+	colors *model.Palette
+	grid   *Grid
 }
 
 // NewPalette creates a Palette at the specified location for the specified colors
-func NewPalette(x, y int, palette *color.Palette) *Palette {
+func NewPalette(x, y int, palette *model.Palette) *Palette {
 	grid := NewGrid(8, 4)
-	for _, c := range *palette {
-		sw := NewSwatch(16, c)
-		sb := NewBox(sw)
-		sb.SetBorder(color.Gray{0x77})
-		sb.SetPadding(1)
-		sb.SetMargin(1)
-		grid.Append(sb)
-	}
 	grid.SetPosition(x, y)
 	return &Palette{
-		grid: grid,
+		x:      x,
+		y:      y,
+		colors: palette,
+		grid:   grid,
 	}
 }
 
@@ -76,5 +74,34 @@ func (p *Palette) SetVisible(visible bool) {
 
 // Update checks for any mouse clicks on the Palette
 func (p *Palette) Update() error {
-	return p.grid.Update()
+	if p.colors.HasChanged() {
+		p.grid.Clear()
+		for _, c := range p.colors.Colors() {
+			sw := NewSwatch(16, c)
+			sb := NewBox(sw)
+			sb.SetBorder(color.Gray{0x77})
+			sb.SetPadding(1)
+			sb.SetMargin(1)
+			p.grid.Append(sb)
+		}
+		p.grid.SetPosition(p.x, p.y)
+	}
+	if err := p.grid.Update(); err != nil {
+		return err
+	}
+	for i, child := range p.grid.children {
+		b := child.(*Box)
+		s := b.child.(*Swatch)
+		switch s.selected {
+		case LeftSelect:
+			p.colors.SetFG(i)
+			break
+		case RightSelect:
+			p.colors.SetBG(i)
+			break
+		default:
+			continue
+		}
+	}
+	return nil
 }

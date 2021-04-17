@@ -19,7 +19,6 @@ package encoding
 import (
 	"encoding/hex"
 	"encoding/json"
-	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"os"
 )
@@ -30,9 +29,7 @@ type spriteJSON struct {
 }
 
 // Sprite is a square image made up of Palettizes Colors
-type Sprite struct {
-	img image.Paletted
-}
+type Sprite image.Paletted
 
 // LoadSprite reads a single sprite from a JSON file and decodes it
 func LoadSprite(path string) (s Sprite, err error) {
@@ -46,21 +43,16 @@ func LoadSprite(path string) (s Sprite, err error) {
 	return
 }
 
-// Convert translates a Sprite to an Ebiten Image for rendering
-func (s *Sprite) Convert() *ebiten.Image {
-	return ebiten.NewImageFromImage(&s.img)
-}
-
 // MarshalJSON is a custom marshaler for the Sprite type
 //
 // Sprites are encoded with a size (NxN) and an array of strings, where each string is a row of pixels, and each pixel is a 2 character hex value
 func (s Sprite) MarshalJSON() (bs []byte, err error) {
 	j := spriteJSON{
-		Size: s.img.Stride,
+		Size: s.Stride,
 	}
 	var row []byte
-	for i := 0; i < len(s.img.Pix); i += s.img.Stride {
-		row = []byte(s.img.Pix[i*s.img.Stride : (i+1)*s.img.Stride])
+	for i := 0; i < len(s.Pix); i += s.Stride {
+		row = []byte(s.Pix[i*s.Stride : (i+1)*s.Stride])
 		j.Pixels = append(j.Pixels, hex.EncodeToString(row))
 	}
 	return json.Marshal(j)
@@ -77,9 +69,9 @@ func (s *Sprite) UnmarshalJSON(b []byte) (err error) {
 		if pix, err = hex.DecodeString(row); err != nil {
 			return
 		}
-		s.img.Pix = append(s.img.Pix, []uint8(pix)...)
+		s.Pix = append(s.Pix, []uint8(pix)...)
 	}
-	s.img.Stride = j.Size
-	s.img.Rect = image.Rect(0, 0, j.Size, j.Size)
+	s.Stride = j.Size
+	s.Rect = image.Rect(0, 0, j.Size, j.Size)
 	return
 }

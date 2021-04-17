@@ -19,7 +19,6 @@ package encoding
 import (
 	"encoding/json"
 	"fmt"
-	"image/color"
 	"os"
 	"text/tabwriter"
 	"time"
@@ -31,8 +30,7 @@ type SpriteSet struct {
 	Author   string    `json:"author"`
 	Date     time.Time `json:"date"`
 	Revision int       `json:"revision"`
-	Sprites  []*Sprite `json:"sprites"`
-	palette  *color.Palette
+	Sprites  []Sprite  `json:"sprites"`
 }
 
 // LoadSpriteSet reads in a SpriteSet for a JSON file and decodes it
@@ -45,19 +43,6 @@ func LoadSpriteSet(path string) (ss SpriteSet, err error) {
 	dec := json.NewDecoder(f)
 	err = dec.Decode(&ss)
 	return
-}
-
-// ChangePalette sets the color Palette for this SpriteSet
-func (ss *SpriteSet) ChangePalette(p *color.Palette) {
-	ss.palette = p
-	for _, s := range ss.Sprites {
-		s.img.Palette = *p
-	}
-}
-
-// Palette is the color Palette used by this SpriteSet
-func (ss *SpriteSet) Palette() *color.Palette {
-	return ss.palette
 }
 
 // Describe summarizes a SpriteSet according to its metadata

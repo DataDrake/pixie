@@ -17,7 +17,7 @@
 package ui
 
 import (
-	"github.com/DataDrake/pixie/encoding"
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -29,13 +29,10 @@ type Toolbar struct {
 }
 
 // NewToolbar creates a Toolbar from a SpriteSet and a Palette
-func NewToolbar(x, y int, ss *encoding.SpriteSet, palette *color.Palette) *Toolbar {
+func NewToolbar(x, y int, ss model.SpriteSet) *Toolbar {
 	grid := NewGrid(2, 4)
-	for _, s := range ss.Sprites {
-		img := s.Convert()
-		sz, _ := img.Size()
-		sp := NewSprite(sz, 1, palette)
-		sp.img = s.Convert()
+	for _, s := range ss {
+		sp := NewSprite(s, false, 1)
 		sb := NewBox(sp)
 		sb.SetBorder(color.Gray{0x77})
 		sb.SetMargin(1)

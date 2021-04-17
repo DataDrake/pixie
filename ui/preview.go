@@ -17,6 +17,7 @@
 package ui
 
 import (
+	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -28,10 +29,9 @@ type Preview struct {
 }
 
 // NewPreview creates a new Preview for the specified Palette
-func NewPreview(x, y int, s *Sprite, palette *color.Palette) *Preview {
+func NewPreview(x, y int, s *model.Sprite) *Preview {
 	var prev Preview
-	p := NewSprite(16, 2, palette)
-	p.img = s.img
+	p := NewSprite(s, false, 2)
 	prev.box = NewBox(p)
 	prev.box.SetBorder(color.Gray{0x77})
 	prev.box.SetMargin(1)
@@ -72,5 +72,5 @@ func (p *Preview) SetVisible(visible bool) {
 
 // Update checks for mouse clicks in the Preview (NOT IMPLEMENTED)
 func (p *Preview) Update() error {
-	return nil
+	return p.box.Update()
 }
