@@ -48,8 +48,9 @@ install:
 	@$(call stage,INSTALL)
 	install -Dm 00755 $(PKGNAME) $(DESTDIR)$(BINDIR)/$(PKGNAME)
 	install -Dm 00644 data/defaults/palette.json $(DESTDIR)$(DATADIR)/defaults/palette.json
-	install -Dm 00644 data/defaults/sprite_toolbar.json $(DESTDIR)$(DATADIR)/defaults/sprite_toolbar.json
 	install -Dm 00644 data/defaults/sprites.json $(DESTDIR)$(DATADIR)/defaults/sprites.json
+	install -Dm 00644 data/ui/palette.json $(DESTDIR)$(DATADIR)/ui/palette.json
+	install -Dm 00644 data/ui/sprite/editor_toolbar.json $(DESTDIR)$(DATADIR)/ui/sprite/editor_toolbar.json
 	install -Dm 00644 data/$(PKGNAME).desktop $(DESTDIR)$(PREFIX)/share/applications/$(PKGNAME).desktop
 	@$(call pass,INSTALL)
 

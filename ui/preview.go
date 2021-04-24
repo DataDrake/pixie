@@ -29,9 +29,9 @@ type Preview struct {
 }
 
 // NewPreview creates a new Preview for the specified Palette
-func NewPreview(x, y int, s *model.Sprite) *Preview {
+func NewPreview(x, y int) *Preview {
 	var prev Preview
-	p := NewSprite(s, false, 2)
+	p := NewSprite(model.GetSprite(0), false, 2)
 	prev.box = NewBox(p)
 	prev.box.SetBorder(color.Gray{0x77})
 	prev.box.SetMargin(1)

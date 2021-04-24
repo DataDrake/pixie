@@ -29,10 +29,9 @@ type Selector struct {
 }
 
 // NewSelector creates a Selector for the provided SpriteSet with the specified Palette
-func NewSelector(x, y int, ss model.SpriteSet) *Selector {
-	// TODO: Switch to using SpriteSet instead of a repeated sprite
+func NewSelector(x, y int) *Selector {
 	grid := NewGrid(8, 4)
-	for _, s := range ss {
+	for _, s := range model.GetSprites() {
 		sp := NewSprite(s, false, 1)
 		sb := NewBox(sp)
 		sb.SetBorder(color.Gray{0x77})

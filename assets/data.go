@@ -25,15 +25,20 @@ var DataDir string
 
 // DefaultPalette is the location of the default palette to load when opening Pixie
 func DefaultPalette() string {
-	return filepath.Join(DataDir, "defaults", "palette.json")
+	return Defaults("palette.json")
 }
 
 // DefaultSprites are the "starter" sprites to load when opening Pixie
 func DefaultSprites() string {
-	return filepath.Join(DataDir, "defaults", "sprites.json")
+	return Defaults("sprites.json")
 }
 
-// DefaultToolbarIcons are the icons to use for the toolbar in the sprite editor
-func DefaultToolbarIcons() string {
-	return filepath.Join(DataDir, "defaults", "sprite_toolbar.json")
+// Defaults calculates a path relative to default assets
+func Defaults(path string) string {
+	return filepath.Join(DataDir, "defaults", path)
+}
+
+// UI calculates a path relative to the UI assets
+func UI(path string) string {
+	return filepath.Join(DataDir, "ui", path)
 }

@@ -32,7 +32,9 @@ type ColorPreview struct {
 }
 
 // NewColorPreview creates a new ColorPreview with the specified size and colors
-func NewColorPreview(x, y int, palette *model.Palette) *ColorPreview {
+func NewColorPreview(x, y int) *ColorPreview {
+	palette := model.GetPalette()
+
 	prev := &ColorPreview{
 		x:       x,
 		y:       y,

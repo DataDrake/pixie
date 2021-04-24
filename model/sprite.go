@@ -17,28 +17,17 @@
 package model
 
 import (
+	"encoding/json"
+	"github.com/DataDrake/pixie/model/encoding"
 	"image"
+	"image/color"
 )
 
 // Sprite holds the data for a single sprite
 type Sprite struct {
-	img     image.Paletted
+	img     *image.Paletted
 	colors  *Palette
 	changed bool
-}
-
-// NewSprite creates a sprite from image data and a palette
-func NewSprite(img image.Paletted, colors *Palette) *Sprite {
-	s := &Sprite{
-		img: img,
-	}
-	s.SetPalette(colors)
-	return s
-}
-
-// Image returns a pointer to the contained image data
-func (s *Sprite) Image() *image.Paletted {
-	return &s.img
 }
 
 // SetFG sets the pixel at the specified location to the FG color
@@ -65,10 +54,15 @@ func (s *Sprite) Palette() *Palette {
 	return s.colors
 }
 
+// Image returns the internal image as a pointer
+func (s *Sprite) Image() *image.Paletted {
+	return s.img
+}
+
 // SetPalette changes the color palette for this sprite
 func (s *Sprite) SetPalette(colors *Palette) {
 	s.colors = colors
-	s.img.Palette = s.colors.Colors()
+	s.img.Palette = color.Palette(s.colors.Colors)
 	s.changed = true
 }
 
@@ -84,4 +78,20 @@ func (s *Sprite) Update() error {
 // HasChanged reports if this Sprite or its Palette have changed and a redraw is needed
 func (s *Sprite) HasChanged() bool {
 	return s.changed || s.colors.HasChanged()
+}
+
+// MarshalJSON is a custom marshaler for the Sprite type
+func (s Sprite) MarshalJSON() (bs []byte, err error) {
+	return json.Marshal(encoding.NewSprite(s.img))
+}
+
+// UnmarshalJSON is a custom unmarshaler for the Sprite type
+func (s *Sprite) UnmarshalJSON(b []byte) (err error) {
+	var j encoding.Sprite
+	if err = json.Unmarshal(b, &j); err != nil {
+		return
+	}
+	(*s).img, err = j.Image()
+	(*s).changed = false
+	return
 }

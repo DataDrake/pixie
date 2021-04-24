@@ -18,12 +18,11 @@ package editor
 
 import (
 	"github.com/DataDrake/pixie/assets"
-	"github.com/DataDrake/pixie/encoding"
 	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
-	"image/color"
 	"log"
+	"path/filepath"
 )
 
 // Sprite is an editor for drawing Sprites and managing Sprite Sets
@@ -34,43 +33,36 @@ type Sprite struct {
 	sprites  *ui.Selector
 	colors   *ui.Palette
 	cPreview *ui.ColorPreview
+}
 
-	palette *model.Palette
+// asset calculates a path relative to the Sprite Editor assets
+func asset(path string) string {
+	return assets.UI(filepath.Join("sprite", path))
 }
 
 // NewSprite creates a new Sprite Editor and populates its GUI
 func NewSprite() *Sprite {
-	dp, err := encoding.LoadPalette(assets.DefaultPalette())
-	if err != nil {
-		log.Fatal(err)
-	}
-	dp.Describe()
-	println()
-	palette := color.Palette(dp.Colors)
-	colors := model.NewPalette(palette)
 
-	ss, err := encoding.LoadSpriteSet(assets.DefaultSprites())
+	editorColors, err := model.LoadPalette(assets.UI("palette.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	ss.Describe()
-	sprites := model.NewSpriteSet(ss, colors)
+	editorColors.Describe()
 
-	tbss, err := encoding.LoadSpriteSet(assets.DefaultToolbarIcons())
+	editorIcons, err := model.LoadSpriteSet(asset("editor_toolbar.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	tbss.Describe()
-	tools := model.NewSpriteSet(tbss, colors.Clone())
+	editorIcons.Describe()
+	editorIcons.SetPalette(editorColors)
 
 	return &Sprite{
-		editor:   ui.NewEditor(88, 8, sprites[0]),
-		preview:  ui.NewPreview(30, 226, sprites[0]),
-		toolbar:  ui.NewToolbar(8, 8, tools),
-		sprites:  ui.NewSelector(8, 58, sprites),
-		colors:   ui.NewPalette(348, 58, colors),
-		cPreview: ui.NewColorPreview(371, 222, colors),
-		palette:  colors,
+		editor:   ui.NewEditor(94, 8),
+		preview:  ui.NewPreview(382, 226),
+		toolbar:  ui.NewToolbar(8, 8, editorIcons),
+		sprites:  ui.NewSelector(360, 58),
+		colors:   ui.NewPalette(8, 58),
+		cPreview: ui.NewColorPreview(30, 222),
 	}
 }
 
@@ -95,8 +87,7 @@ func (s *Sprite) Update() error {
 	if err := s.cPreview.Update(); err != nil {
 		return err
 	}
-	// Update Model
-	return s.palette.Update()
+	return nil
 }
 
 // Exit checks for unsaved state and starts the process of shutting down

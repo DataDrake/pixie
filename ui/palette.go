@@ -31,13 +31,13 @@ type Palette struct {
 }
 
 // NewPalette creates a Palette at the specified location for the specified colors
-func NewPalette(x, y int, palette *model.Palette) *Palette {
+func NewPalette(x, y int) *Palette {
 	grid := NewGrid(8, 4)
 	grid.SetPosition(x, y)
 	return &Palette{
 		x:      x,
 		y:      y,
-		colors: palette,
+		colors: model.GetPalette(),
 		grid:   grid,
 	}
 }
@@ -76,7 +76,7 @@ func (p *Palette) SetVisible(visible bool) {
 func (p *Palette) Update() error {
 	if p.colors.HasChanged() {
 		p.grid.Clear()
-		for _, c := range p.colors.Colors() {
+		for _, c := range p.colors.Colors {
 			sw := NewSwatch(16, c)
 			sb := NewBox(sw)
 			sb.SetBorder(color.Gray{0x77})

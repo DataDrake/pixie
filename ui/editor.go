@@ -29,9 +29,9 @@ type Editor struct {
 }
 
 // NewEditor creates an Editor at the desired location for the specified Sprite
-func NewEditor(x, y int, s *model.Sprite) *Editor {
+func NewEditor(x, y int) *Editor {
 	var ed Editor
-	sp := NewSprite(s, true, 16)
+	sp := NewSprite(model.GetSprite(0), true, 16)
 	ed.box = NewBox(sp)
 	ed.box.SetBorder(color.Gray{0x77})
 	ed.box.SetMargin(1)

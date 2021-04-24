@@ -29,9 +29,9 @@ type Toolbar struct {
 }
 
 // NewToolbar creates a Toolbar from a SpriteSet and a Palette
-func NewToolbar(x, y int, ss model.SpriteSet) *Toolbar {
+func NewToolbar(x, y int, ss *model.SpriteSet) *Toolbar {
 	grid := NewGrid(2, 4)
-	for _, s := range ss {
+	for _, s := range ss.Sprites {
 		sp := NewSprite(s, false, 1)
 		sb := NewBox(sp)
 		sb.SetBorder(color.Gray{0x77})

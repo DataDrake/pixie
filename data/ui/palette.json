@@ -1,11 +1,11 @@
 {
-    "name"     : "default palette",
+    "name"     : "ui palette",
     "author"   : "DataDrake",
     "date"     : "2020-12-22T18:41:00.00Z",
     "revision" : 1,
     "colors"   : [
         "000000FF",
-        "333333FF",
+        "EEEEEEFF",
         "777777FF",
         "AAAAAAFF",
         "CCCCCCFF",

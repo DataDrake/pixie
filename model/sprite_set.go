@@ -17,26 +17,83 @@
 package model
 
 import (
-	"github.com/DataDrake/pixie/encoding"
-	"image"
+	"encoding/json"
+	"fmt"
+	"github.com/DataDrake/pixie/assets"
+	"log"
+	"os"
+	"text/tabwriter"
+	"time"
 )
 
-// SpriteSet represents one or more sprites belonging to a single set
-type SpriteSet []*Sprite
-
-// NewSpriteSet creates a set from decoded image data and a Palette
-func NewSpriteSet(ss encoding.SpriteSet, p *Palette) (set SpriteSet) {
-	for _, s := range ss.Sprites {
-		sp := NewSprite(image.Paletted(s), p)
-		set = append(set, sp)
+func init() {
+	set, err := LoadSpriteSet(assets.DefaultSprites())
+	if err != nil {
+		log.Fatal(err)
 	}
+	set.Describe()
+	println()
+	SetSprites(set)
+}
+
+var spriteSet *SpriteSet
+
+// GetSprites retrieves a list of all of the sprints in the current SpriteSet
+func GetSprites() []*Sprite {
+	return spriteSet.Sprites
+}
+
+// GetSprite retrieves a sprite from the current SpriteSet
+func GetSprite(index int) *Sprite {
+	return spriteSet.Sprites[index]
+}
+
+// SetSprites swaps out the current SpriteSet with a different one
+func SetSprites(set *SpriteSet) {
+	spriteSet = set
+	spriteSet.SetPalette(GetPalette())
+}
+
+// SpriteSet represents one or more sprites belonging to a single set
+type SpriteSet struct {
+	Name     string    `json:"name"`
+	Author   string    `json:"author"`
+	Date     time.Time `json:"date"`
+	Revision int       `json:"revision"`
+	Sprites  []*Sprite `json:"sprites"`
+	modified bool
+}
+
+// LoadSpriteSet reads in a SpriteSet for a JSON file and decodes it
+func LoadSpriteSet(path string) (ss *SpriteSet, err error) {
+	ss = &SpriteSet{
+		modified: false,
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+	dec := json.NewDecoder(f)
+	err = dec.Decode(ss)
 	return
 }
 
 // SetPalette sets the color Palette for this SpriteSet
 func (ss *SpriteSet) SetPalette(p *Palette) {
-	for i, s := range *ss {
+	for i, s := range ss.Sprites {
 		s.SetPalette(p)
-		(*ss)[i] = s
+		ss.Sprites[i] = s
 	}
+}
+
+// Describe summarizes a SpriteSet according to its metadata
+func (ss *SpriteSet) Describe() {
+	tw := tabwriter.NewWriter(os.Stdout, 0, 4, 1, ' ', 0)
+	fmt.Fprintf(tw, "Name\t: %s\n", ss.Name)
+	fmt.Fprintf(tw, "Author\t: %s\n", ss.Author)
+	fmt.Fprintf(tw, "Date\t: %s\n", ss.Date)
+	fmt.Fprintf(tw, "Revision\t: %d\n", ss.Revision)
+	fmt.Fprintf(tw, "Number of Sprites\t: %d\n", len(ss.Sprites))
+	tw.Flush()
 }
