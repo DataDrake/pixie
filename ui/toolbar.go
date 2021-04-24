@@ -17,7 +17,6 @@
 package ui
 
 import (
-	"github.com/DataDrake/pixie/model"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -25,24 +24,29 @@ import (
 
 // Toolbar is a grid of toolbar icons for carrying out specific actions
 type Toolbar struct {
+	x, y int
 	grid *Grid
 }
 
-// NewToolbar creates a Toolbar from a SpriteSet and a Palette
-func NewToolbar(x, y int, ss *model.SpriteSet) *Toolbar {
+// NewToolbar creates an empty Toolbar
+func NewToolbar(x, y int) *Toolbar {
 	grid := NewGrid(2, 4)
-	for _, s := range ss.Sprites {
-		sp := NewSprite(s, false, 1)
-		sb := NewBox(sp)
-		sb.SetBorder(color.Gray{0x77})
-		sb.SetMargin(1)
-		sb.SetPadding(1)
-		grid.Append(sb)
-	}
 	grid.SetPosition(x, y)
 	return &Toolbar{
+		x:    x,
+		y:    y,
 		grid: grid,
 	}
+}
+
+// Append adds a new Button to the Toolbar
+func (t *Toolbar) Append(b *Button) {
+	sb := NewBox(b)
+	sb.SetBorder(color.Gray{0x77})
+	sb.SetMargin(1)
+	sb.SetPadding(1)
+	t.grid.Append(sb)
+	t.grid.SetPosition(t.x, t.y)
 }
 
 // Bounds returns a rectangle indicating the visible boundaries of the Toolbar

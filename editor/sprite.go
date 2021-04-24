@@ -22,17 +22,19 @@ import (
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"log"
+	"os"
 	"path/filepath"
 )
 
 // Sprite is an editor for drawing Sprites and managing Sprite Sets
 type Sprite struct {
-	editor   *ui.Editor
-	preview  *ui.Preview
-	toolbar  *ui.Toolbar
-	sprites  *ui.Selector
-	colors   *ui.Palette
-	cPreview *ui.ColorPreview
+	editor    *ui.Editor
+	preview   *ui.Preview
+	toolbar   *ui.Toolbar
+	spriteBar *ui.Toolbar
+	sprites   *ui.Selector
+	colors    *ui.Palette
+	cPreview  *ui.ColorPreview
 }
 
 // asset calculates a path relative to the Sprite Editor assets
@@ -49,20 +51,51 @@ func NewSprite() *Sprite {
 	}
 	editorColors.Describe()
 
-	editorIcons, err := model.LoadSpriteSet(asset("editor_toolbar.json"))
+	editorIcons, err := model.LoadSpriteSet(asset("editor_toolbar.json"), os.O_RDONLY)
 	if err != nil {
 		log.Fatal(err)
 	}
 	editorIcons.Describe()
 	editorIcons.SetPalette(editorColors)
 
+	spriteIcons, err := model.LoadSpriteSet(asset("sprite_toolbar.json"), os.O_RDONLY)
+	if err != nil {
+		log.Fatal(err)
+	}
+	spriteIcons.Describe()
+	spriteIcons.SetPalette(editorColors)
+
+	tb := ui.NewToolbar(8, 8)
+
+	tb.Append(ui.NewButton(editorIcons.Sprites[0], 1, func(_ ebiten.MouseButton) {})) // New
+	tb.Append(ui.NewButton(editorIcons.Sprites[1], 1, func(_ ebiten.MouseButton) {})) // Open
+	tb.Append(ui.NewButton(editorIcons.Sprites[2], 1, func(btn ebiten.MouseButton) {
+		if btn == ebiten.MouseButtonLeft {
+			model.SaveSprites()
+		}
+	})) // Save
+	tb.Append(ui.NewButton(editorIcons.Sprites[3], 1, func(_ ebiten.MouseButton) {})) // SaveAs
+	tb.Append(ui.NewButton(editorIcons.Sprites[4], 1, func(_ ebiten.MouseButton) {})) // Export
+
+	sb := ui.NewToolbar(360, 8)
+
+	sb.Append(ui.NewButton(spriteIcons.Sprites[0], 1, func(_ ebiten.MouseButton) {})) // Add
+	sb.Append(ui.NewButton(spriteIcons.Sprites[1], 1, func(_ ebiten.MouseButton) {})) // Duplicate
+	sb.Append(ui.NewButton(spriteIcons.Sprites[2], 1, func(_ ebiten.MouseButton) {})) // Clear
+	sb.Append(ui.NewButton(spriteIcons.Sprites[3], 1, func(_ ebiten.MouseButton) {})) // Remove
+	sb.Append(ui.NewButton(spriteIcons.Sprites[4], 1, func(_ ebiten.MouseButton) {})) // First
+	sb.Append(ui.NewButton(spriteIcons.Sprites[5], 1, func(_ ebiten.MouseButton) {})) // Left
+	sb.Append(ui.NewButton(spriteIcons.Sprites[6], 1, func(_ ebiten.MouseButton) {})) // Right
+	sb.Append(ui.NewButton(spriteIcons.Sprites[7], 1, func(_ ebiten.MouseButton) {})) // Last
+
 	return &Sprite{
-		editor:   ui.NewEditor(94, 8),
-		preview:  ui.NewPreview(382, 226),
-		toolbar:  ui.NewToolbar(8, 8, editorIcons),
-		sprites:  ui.NewSelector(360, 58),
-		colors:   ui.NewPalette(8, 58),
-		cPreview: ui.NewColorPreview(30, 222),
+		editor:    ui.NewEditor(94, 8),
+		preview:   ui.NewPreview(382, 226),
+		toolbar:   tb,
+		spriteBar: sb,
+		sprites:   ui.NewSelector(360, 58),
+		colors:    ui.NewPalette(8, 58),
+		cPreview:  ui.NewColorPreview(30, 222),
 	}
 }
 
@@ -78,6 +111,9 @@ func (s *Sprite) Update() error {
 	if err := s.toolbar.Update(); err != nil {
 		return err
 	}
+	if err := s.spriteBar.Update(); err != nil {
+		return err
+	}
 	if err := s.sprites.Update(); err != nil {
 		return err
 	}
@@ -90,7 +126,15 @@ func (s *Sprite) Update() error {
 	if err := model.GetPalette().Update(); err != nil {
 		return err
 	}
+	if err := model.GetSprites().Update(); err != nil {
+		return err
+	}
 	return nil
+}
+
+// Save writes out any changes to the current SpriteSet
+func (s *Sprite) Save() error {
+	return model.SaveSprites()
 }
 
 // Exit checks for unsaved state and starts the process of shutting down
@@ -104,6 +148,7 @@ func (s *Sprite) Draw(screen *ebiten.Image) {
 	s.editor.Draw(screen)
 	s.preview.Draw(screen)
 	s.toolbar.Draw(screen)
+	s.spriteBar.Draw(screen)
 	s.sprites.Draw(screen)
 	s.colors.Draw(screen)
 	s.cPreview.Draw(screen)

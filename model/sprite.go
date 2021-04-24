@@ -25,15 +25,33 @@ import (
 
 // Sprite holds the data for a single sprite
 type Sprite struct {
-	img     *image.Paletted
-	colors  *Palette
-	changed bool
+	img      *image.Paletted
+	colors   *Palette
+	modified bool
+	changed  bool
+}
+
+// Clone creates a deep copy of this Sprite
+func (s *Sprite) Clone() (next *Sprite) {
+	next = &Sprite{
+		img: &image.Paletted{
+			Stride:  s.img.Stride,
+			Rect:    s.img.Rect,
+			Palette: s.img.Palette,
+		},
+		colors:   s.colors,
+		modified: true,
+		changed:  true,
+	}
+	next.img.Pix = s.img.Pix
+	return
 }
 
 // SetFG sets the pixel at the specified location to the FG color
 func (s *Sprite) SetFG(x, y int) {
 	fg, _ := s.colors.FG()
 	s.img.SetColorIndex(x, y, uint8(fg))
+	s.modified = true
 	s.changed = true
 }
 
@@ -41,6 +59,7 @@ func (s *Sprite) SetFG(x, y int) {
 func (s *Sprite) SetBG(x, y int) {
 	bg, _ := s.colors.BG()
 	s.img.SetColorIndex(x, y, uint8(bg))
+	s.modified = true
 	s.changed = true
 }
 
@@ -66,18 +85,19 @@ func (s *Sprite) SetPalette(colors *Palette) {
 	s.changed = true
 }
 
-// Update checks for any internal changes for this sprite
-func (s *Sprite) Update() error {
-	s.changed = false
-	if s.colors.HasChanged() {
-		s.changed = true
-	}
-	return nil
+// IsModified reports if this Sprite has edited
+func (s *Sprite) IsModified() bool {
+	return s.modified
 }
 
-// HasChanged reports if this Sprite or its Palette have changed and a redraw is needed
+// HasChanged report if the Sprite has been edited or if the color palette has changed
 func (s *Sprite) HasChanged() bool {
 	return s.changed || s.colors.HasChanged()
+}
+
+// Update clears any change flags used in rendering
+func (s *Sprite) Update() {
+	s.changed = false
 }
 
 // MarshalJSON is a custom marshaler for the Sprite type
@@ -92,6 +112,7 @@ func (s *Sprite) UnmarshalJSON(b []byte) (err error) {
 		return
 	}
 	(*s).img, err = j.Image()
-	(*s).changed = false
+	(*s).modified = false
+	(*s).changed = true
 	return
 }

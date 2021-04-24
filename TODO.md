@@ -2,39 +2,37 @@
 
 ## Ludum Dare Priorities
 
-- [x] Clean up editor code
-    - [x] Separating Editors from Pixie
-    - [x] Allow Editors to be switched
-    - [x] Added Exit() functionability for Editors to allow saving
-- [x] Switch Colors
-    - [x] Switch ColorPreview to using model.Palette
-    - [x] Switch Palette to using model.Palette
-    - [x] Switch Sprite to using model.Palette
-    - [x] Switch Selector to using model.Palette
-    - [x] Add click detection to Swatches and ui.Palette (update model.Palette)
-- [x] Switch Sprites and Sprite Sets
-    - [x] Switch Editor to using a model.Sprite
-    - [x] Switch Toolbar to using a model.SpriteSet
-    - [x] Switch Preview to using a model.Sprite
-    - [x] Switch Selector to using a model.SpriteSet
+- [x] CTRL+S to Save
+    - [x] Add a callback for saving
+    - [x] Modify editors to allow saving
+    - [x] Introduce file handles and saving to SpriteSets
+- [x] Clone the Default SpriteSet when creating a new set or starting from nothing
+    - [x] Clone for SpriteSet
+    - [x] Clone for Sprite
+- [x] Add Button type for sending signals to other UI elements
 - [ ] Modify Sprite Sets
     - [ ] Add Sprite
+    - [ ] Duplicate Sprite
+    - [ ] Copy Sprite
+    - [ ] Clear Sprite
     - [ ] Remove Sprite
     - [ ] Select Sprite
+        - [ ] Switching Sprites using Selector
     - [ ] Reorder Sprites
 
-- [ ] Toolbar
-    - [ ] Working Save function
-- [ ] Load Sprite-Set from os.Args[1]
+- [x] Toolbar
+    - [x] Working Save function
+- [x] Load Sprite-Set from os.Args[1]
+
+## Post LD priorities
+
 - [ ] Embed assets using embed.FS for the UI
     - [ ] Toolbar sprites
     - [ ] Fonts
     - [ ] Default Palettes
-
 - [ ] Are you sure?
     - [ ] Modal Dialog
     - [ ] Translucent Overlay
-
 - [ ] Encode Sprites as a Bitmap-like format
     - [ ] Custom image.Image types
         - [ ] 1-bit per pixel (2 colors)
@@ -45,8 +43,6 @@
 
 ## General
 
-- [ ] Add Button type for sending signals to other UI elements
-- [ ] Switching Sprites using Selector
 - [ ] Color picker
 - [ ] Animated loading screen with gameboy inspired start-up sound
 

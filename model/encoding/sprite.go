@@ -33,7 +33,7 @@ func NewSprite(img *image.Paletted) (s Sprite) {
 	s.Size = img.Stride
 	var row []byte
 	for i := 0; i < len(img.Pix); i += img.Stride {
-		row = []byte(img.Pix[i*img.Stride : (i+1)*img.Stride])
+		row = []byte(img.Pix[i : i+img.Stride])
 		s.Pixels = append(s.Pixels, hex.EncodeToString(row))
 	}
 	return

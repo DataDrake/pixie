@@ -48,6 +48,13 @@ var QuitEvent = input.KeyEvent{
 	State: input.Pressed,
 }
 
+// SaveEvent listens for CTRL+S to be pressed
+var SaveEvent = input.KeyEvent{
+	Key:   ebiten.KeyS,
+	Mod:   input.Ctrl,
+	State: input.Pressed,
+}
+
 // NewPixie creates a new Pixie object and populates the GUI
 func NewPixie() *Pixie {
 	// Build Editors
@@ -64,7 +71,18 @@ func NewPixie() *Pixie {
 		p.quitting = true
 		p.current = editor.SpriteKind
 	})
+	// Register the save event
+	input.Register(SaveEvent, func(_ input.KeyEvent) {
+		if err := p.Save(); err != nil {
+			log.Println(err)
+		}
+	})
 	return p
+}
+
+// Save tells the current editor to save the thing(s) it is editing
+func (p *Pixie) Save() error {
+	return p.editors[p.current].Save()
 }
 
 // Update checks for all updates in the input and the internal state of Pixie

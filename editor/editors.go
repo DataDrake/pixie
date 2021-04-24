@@ -36,6 +36,8 @@ type Editor interface {
 	Draw(screen *ebiten.Image)
 	// Update changes the internal state of the Editor and/or its Children
 	Update() error
+	// Save writes out and unsaved changes to the thing being edited
+	Save() error
 	// Exit deals with things like saving unsaved work
 	Exit() (done bool, err error)
 }
