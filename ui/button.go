@@ -96,6 +96,7 @@ func (b *Button) SetVisible(visible bool) {
 // Update detects a mouse click inside a sprite, changing the color according to the button pressed
 func (b *Button) Update() error {
 	if b.src.HasChanged() {
+		b.src.Update()
 		b.img = ebiten.NewImageFromImage(b.src.Image())
 	}
 	if !b.visible {
