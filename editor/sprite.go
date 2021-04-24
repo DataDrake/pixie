@@ -87,6 +87,9 @@ func (s *Sprite) Update() error {
 	if err := s.cPreview.Update(); err != nil {
 		return err
 	}
+	if err := model.GetPalette().Update(); err != nil {
+		return err
+	}
 	return nil
 }
 
