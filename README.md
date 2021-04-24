@@ -24,6 +24,8 @@ In preparation for a future Ludum Dare, I wanted a Pixel editor for doing Sprite
 Under Construction
 ```
 
+![WIP](/screenshots/wip.png "Work in Progress")
+
 ## Requirements
 
 * Go 1.15 (tested)
