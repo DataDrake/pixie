@@ -20,22 +20,15 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type keyState []ebiten.Key
+type keyState map[ebiten.Key]bool
 
-var last keyState
+var last = make(keyState)
 
 func change(prev, curr keyState, mod Modifier, state State) (events []KeyEvent) {
-	for _, cKey := range curr {
-		found := false
-		for _, pKey := range prev {
-			if cKey == pKey {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for key := range curr {
+		if !last[key] {
 			e := KeyEvent{
-				Key:   cKey,
+				Key:   key,
 				Mod:   mod,
 				State: state,
 			}

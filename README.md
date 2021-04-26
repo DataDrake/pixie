@@ -3,6 +3,8 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/DataDrake/pixie)](https://goreportcard.com/report/github.com/DataDrake/pixie) [![license](https://img.shields.io/github/license/DataDrake/pixie.svg)]()
 
+<img src="https://github.com/DataDrake/pixie/blob/master/screenshots/logo.png" width="200">
+
 ## Motivation
 
 In preparation for a future Ludum Dare, I wanted a Pixel editor for doing Sprite design, animation, and tiling. I could have used a paid product, but decided this would be a good opportunity to learn the [Ebiten](https://ebiten.org/) game library, practice 2D UI design, and build my own tools. Thus, Pixie was born.

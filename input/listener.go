@@ -24,7 +24,6 @@ import (
 type KeyListener func(ke KeyEvent)
 
 var keyListeners map[KeyEvent][]KeyListener
-var keys = []ebiten.Key{ebiten.KeyAlt, ebiten.KeyControl}
 
 func init() {
 	keyListeners = make(map[KeyEvent][]KeyListener)
@@ -33,24 +32,22 @@ func init() {
 // Register associates a KeyListener with a specific KeyEvent
 func Register(event KeyEvent, listener KeyListener) {
 	keyListeners[event] = append(keyListeners[event], listener)
-	keys = append(keys, event.Key)
 }
 
 // Update reads all of the currently pressed keys and compares them against previously pressed keys to generate KeyEvents
 func Update() {
-	var curr keyState
+	curr := make(keyState)
 	var mod Modifier
 	// Get the status of the keys that currently pressed
-	for _, k := range keys {
-		if ebiten.IsKeyPressed(k) {
-			switch k {
-			case ebiten.KeyAlt:
-				mod |= Alt
-			case ebiten.KeyControl:
-				mod |= Ctrl
-			default:
-				curr = append(curr, k)
-			}
+	if ebiten.IsKeyPressed(ebiten.KeyAlt) {
+		mod |= Alt
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyControl) {
+		mod |= Ctrl
+	}
+	for event := range keyListeners {
+		if ebiten.IsKeyPressed(event.Key) {
+			curr[event.Key] = true
 		}
 	}
 	// Generate KeyEvents for changes in state

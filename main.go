@@ -121,7 +121,6 @@ func main() {
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowResizable(true)
 	ebiten.SetWindowTitle("Pixie")
-	println(ebiten.KeyMax)
 	if err := ebiten.RunGame(NewPixie()); err != nil {
 		log.Fatal(err)
 	}

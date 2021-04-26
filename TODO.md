@@ -19,6 +19,10 @@
     - [ ] Select Sprite
         - [ ] Switching Sprites using Selector
     - [ ] Reorder Sprites
+        - [ ] First
+        - [ ] Left
+        - [ ] Right
+        - [ ] Last
 
 - [x] Toolbar
     - [x] Working Save function
