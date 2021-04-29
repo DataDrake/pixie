@@ -115,3 +115,8 @@ func (b *Box) SetVisible(visible bool) {
 func (b *Box) Update() error {
 	return b.child.Update()
 }
+
+// Child give access to a Box's child
+func (b *Box) Child() Drawable {
+	return b.child
+}

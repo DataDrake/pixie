@@ -59,11 +59,9 @@ var SaveEvent = input.KeyEvent{
 // NewPixie creates a new Pixie object and populates the GUI
 func NewPixie() *Pixie {
 	// Build Editors
-	var editors [editor.Max]editor.Editor
-	editors[editor.SpriteKind] = editor.NewSprite()
 	// Build Pixie
 	p := &Pixie{
-		editors: editors,
+		editors: editor.All(),
 		current: editor.SpriteKind,
 		last:    time.Now(),
 	}

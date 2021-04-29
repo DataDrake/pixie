@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-package ui
+package sprite
 
 import (
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -25,14 +26,14 @@ import (
 
 // Editor allows for pixel-by-pixel modification of a Sprite
 type Editor struct {
-	box *Box
+	box *ui.Box
 }
 
 // NewEditor creates an Editor at the desired location for the specified Sprite
 func NewEditor(x, y int) *Editor {
 	var ed Editor
 	sp := NewSprite(model.GetSprite(0), true, 16)
-	ed.box = NewBox(sp)
+	ed.box = ui.NewBox(sp)
 	ed.box.SetBorder(color.Gray{0x77})
 	ed.box.SetMargin(1)
 	ed.box.SetPadding(1)

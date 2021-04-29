@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-package ui
+package sprite
 
 import (
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -25,15 +26,15 @@ import (
 
 // Selector is a 2D grid of Sprites
 type Selector struct {
-	grid *Grid
+	grid *ui.Grid
 }
 
 // NewSelector creates a Selector for the provided SpriteSet with the specified Palette
 func NewSelector(x, y int) *Selector {
-	grid := NewGrid(8, 4)
+	grid := ui.NewGrid(8, 4)
 	for _, s := range model.GetSprites().Sprites {
 		sp := NewSprite(s, false, 1)
-		sb := NewBox(sp)
+		sb := ui.NewBox(sp)
 		sb.SetBorder(color.Gray{0x77})
 		sb.SetMargin(1)
 		sb.SetPadding(1)

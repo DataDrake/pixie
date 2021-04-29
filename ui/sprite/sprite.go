@@ -14,11 +14,12 @@
 // limitations under the License.
 //
 
-package ui
+package sprite
 
 import (
 	"fmt"
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
@@ -30,7 +31,7 @@ type Sprite struct {
 	size     int
 	scale    int
 	visible  bool
-	selected Selected
+	selected ui.Selected
 	writable bool
 	src      *model.Sprite
 	img      *ebiten.Image
@@ -100,7 +101,7 @@ func (s *Sprite) SetVisible(visible bool) {
 
 // Update detects a mouse click inside a sprite, changing the color according to the button pressed
 func (s *Sprite) Update() error {
-	s.selected = UnSelected
+	s.selected = ui.UnSelected
 	cx, cy := ebiten.CursorPosition()
 	if util.In(s.Bounds(), cx, cy) {
 		cx, cy = (cx-s.x)/s.scale, (cy-s.y)/s.scale
@@ -108,13 +109,13 @@ func (s *Sprite) Update() error {
 			if s.writable {
 				s.src.SetFG(cx, cy)
 			}
-			s.selected = LeftSelect
+			s.selected = ui.LeftSelect
 		}
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
 			if s.writable {
 				s.src.SetBG(cx, cy)
 			}
-			s.selected = RightSelect
+			s.selected = ui.RightSelect
 		}
 	}
 	if s.src.HasChanged() {

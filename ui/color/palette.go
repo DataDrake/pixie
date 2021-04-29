@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-package ui
+package color
 
 import (
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -27,12 +28,12 @@ import (
 type Palette struct {
 	x, y   int
 	colors *model.Palette
-	grid   *Grid
+	grid   *ui.Grid
 }
 
 // NewPalette creates a Palette at the specified location for the specified colors
 func NewPalette(x, y int) *Palette {
-	grid := NewGrid(8, 4)
+	grid := ui.NewGrid(8, 4)
 	grid.SetPosition(x, y)
 	return &Palette{
 		x:      x,
@@ -78,7 +79,7 @@ func (p *Palette) Update() error {
 		p.grid.Clear()
 		for _, c := range p.colors.Colors {
 			sw := NewSwatch(16, c)
-			sb := NewBox(sw)
+			sb := ui.NewBox(sw)
 			sb.SetBorder(color.Gray{0x77})
 			sb.SetPadding(1)
 			sb.SetMargin(1)
@@ -89,14 +90,14 @@ func (p *Palette) Update() error {
 	if err := p.grid.Update(); err != nil {
 		return err
 	}
-	for i, child := range p.grid.children {
-		b := child.(*Box)
-		s := b.child.(*Swatch)
+	for i, child := range p.grid.Children() {
+		b := child.(*ui.Box)
+		s := b.Child().(*Swatch)
 		switch s.selected {
-		case LeftSelect:
+		case ui.LeftSelect:
 			p.colors.SetFG(i)
 			break
-		case RightSelect:
+		case ui.RightSelect:
 			p.colors.SetBG(i)
 			break
 		default:

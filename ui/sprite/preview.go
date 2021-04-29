@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-package ui
+package sprite
 
 import (
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
@@ -25,14 +26,14 @@ import (
 
 // Preview provides an enlarged view of a Sprite
 type Preview struct {
-	box *Box
+	box *ui.Box
 }
 
 // NewPreview creates a new Preview for the specified Palette
 func NewPreview(x, y int) *Preview {
 	var prev Preview
 	p := NewSprite(model.GetSprite(0), false, 2)
-	prev.box = NewBox(p)
+	prev.box = ui.NewBox(p)
 	prev.box.SetBorder(color.Gray{0x77})
 	prev.box.SetMargin(1)
 	prev.box.SetPadding(1)

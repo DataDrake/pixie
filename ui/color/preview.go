@@ -14,28 +14,29 @@
 // limitations under the License.
 //
 
-package ui
+package color
 
 import (
 	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
 )
 
-// ColorPreview displays the currently selected FG and BG colors
-type ColorPreview struct {
+// Preview displays the currently selected FG and BG colors
+type Preview struct {
 	x, y    int
-	fg      *Box
-	bg      *Box
+	fg      *ui.Box
+	bg      *ui.Box
 	palette *model.Palette
 }
 
-// NewColorPreview creates a new ColorPreview with the specified size and colors
-func NewColorPreview(x, y int) *ColorPreview {
+// NewPreview creates a new Preview with the specified size and colors
+func NewPreview(x, y int) *Preview {
 	palette := model.GetPalette()
 
-	prev := &ColorPreview{
+	prev := &Preview{
 		x:       x,
 		y:       y,
 		palette: palette,
@@ -43,13 +44,13 @@ func NewColorPreview(x, y int) *ColorPreview {
 
 	_, fg := palette.FG()
 	fgS := NewSwatch(16, fg)
-	prev.fg = NewBox(fgS)
+	prev.fg = ui.NewBox(fgS)
 	prev.fg.SetBorder(color.Gray{0x77})
 	prev.fg.SetPadding(1)
 
 	_, bg := palette.BG()
 	bgS := NewSwatch(16, bg)
-	prev.bg = NewBox(bgS)
+	prev.bg = ui.NewBox(bgS)
 	prev.bg.SetBorder(color.Gray{0x77})
 	prev.bg.SetPadding(1)
 
@@ -57,49 +58,49 @@ func NewColorPreview(x, y int) *ColorPreview {
 	return prev
 }
 
-// Bounds returns a Rectangle defining the visible area occupied by the ColorPreview
-func (p *ColorPreview) Bounds() image.Rectangle {
+// Bounds returns a Rectangle defining the visible area occupied by the Preview
+func (p *Preview) Bounds() image.Rectangle {
 	cx, cy := p.PreferredSize()
 	return image.Rect(p.x, p.y, p.x+cx, p.y+cy)
 }
 
-// Draw renders the ColorPreview to a screen
-func (p *ColorPreview) Draw(screen *ebiten.Image) {
+// Draw renders the Preview to a screen
+func (p *Preview) Draw(screen *ebiten.Image) {
 	p.bg.Draw(screen)
 	p.fg.Draw(screen)
 }
 
 // SetPosition changes the XY coordinate of the upper-left pixel
-func (p *ColorPreview) SetPosition(x, y int) {
+func (p *Preview) SetPosition(x, y int) {
 	cx, cy := p.fg.PreferredSize()
 	p.bg.SetPosition(x+cx, y+cy)
 	p.fg.SetPosition(x, y)
 }
 
-// SetSize changes the width and height of the ColorPreview (NOT IMPLEMENTED)
-func (p *ColorPreview) SetSize(sx, sy int) {
+// SetSize changes the width and height of the Preview (NOT IMPLEMENTED)
+func (p *Preview) SetSize(sx, sy int) {
 	panic("set size not implemented")
 }
 
-// PreferredSize calculated the desired height and width of the ColorPreview
-func (p *ColorPreview) PreferredSize() (sx, sy int) {
+// PreferredSize calculated the desired height and width of the Preview
+func (p *Preview) PreferredSize() (sx, sy int) {
 	cx, cy := p.fg.PreferredSize()
 	return 2 * cx, 2 * cy
 }
 
-// SetVisible changes the visibility of the ColorPreview
-func (p *ColorPreview) SetVisible(visible bool) {
+// SetVisible changes the visibility of the Preview
+func (p *Preview) SetVisible(visible bool) {
 	p.fg.SetVisible(visible)
 	p.bg.SetVisible(visible)
 }
 
 // Update calls Update for the FG and BG swatches
-func (p *ColorPreview) Update() error {
+func (p *Preview) Update() error {
 	if p.palette.HasChanged() {
 		_, fg := p.palette.FG()
 		_, bg := p.palette.BG()
-		p.fg.child.(*Swatch).Swap(fg)
-		p.bg.child.(*Swatch).Swap(bg)
+		p.fg.Child().(*Swatch).Swap(fg)
+		p.bg.Child().(*Swatch).Swap(bg)
 	}
 	if err := p.fg.Update(); err != nil {
 		return err

@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-package ui
+package color
 
 import (
 	"fmt"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
@@ -29,7 +30,7 @@ type Swatch struct {
 	x, y     int
 	size     int
 	visible  bool
-	selected Selected
+	selected ui.Selected
 	img      *ebiten.Image
 	color    color.Color
 }
@@ -96,14 +97,14 @@ func (s *Swatch) SetVisible(visible bool) {
 func (s *Swatch) Update() error {
 	cx, cy := ebiten.CursorPosition()
 	if !util.In(s.Bounds(), cx, cy) {
-		s.selected = UnSelected
+		s.selected = ui.UnSelected
 		return nil
 	}
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		s.selected = LeftSelect
+		s.selected = ui.LeftSelect
 	}
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
-		s.selected = RightSelect
+		s.selected = ui.RightSelect
 	}
 	return nil
 }

@@ -121,3 +121,8 @@ func (g *Grid) Update() error {
 func (g *Grid) Clear() {
 	g.children = make([]Drawable, 0)
 }
+
+// Children provides access to a Grid's children
+func (g *Grid) Children() []Drawable {
+	return g.children
+}

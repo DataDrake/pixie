@@ -17,6 +17,7 @@
 package editor
 
 import (
+	"github.com/DataDrake/pixie/editor/sprite"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -40,4 +41,10 @@ type Editor interface {
 	Save() error
 	// Exit deals with things like saving unsaved work
 	Exit() (done bool, err error)
+}
+
+// All builds the available Editors
+func All() (editors [Max]Editor) {
+	editors[SpriteKind] = sprite.NewEditor()
+	return
 }
