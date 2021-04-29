@@ -49,6 +49,7 @@ install:
 	install -Dm 00755 $(PKGNAME) $(DESTDIR)$(BINDIR)/$(PKGNAME)
 	install -Dm 00644 data/defaults/palette.json $(DESTDIR)$(DATADIR)/defaults/palette.json
 	install -Dm 00644 data/defaults/sprites.json $(DESTDIR)$(DATADIR)/defaults/sprites.json
+	install -Dm 00644 data/ui/logo.json $(DESTDIR)$(DATADIR)/ui/logo.json
 	install -Dm 00644 data/ui/palette.json $(DESTDIR)$(DATADIR)/ui/palette.json
 	install -Dm 00644 data/ui/sprite/editor_toolbar.json $(DESTDIR)$(DATADIR)/ui/sprite/editor_toolbar.json
 	install -Dm 00644 data/ui/sprite/sprite_toolbar.json $(DESTDIR)$(DATADIR)/ui/sprite/sprite_toolbar.json

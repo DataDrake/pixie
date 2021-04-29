@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"github.com/DataDrake/pixie/editor"
 	"github.com/DataDrake/pixie/input"
+	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	_ "image/png"
@@ -121,6 +122,7 @@ func main() {
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowResizable(true)
 	ebiten.SetWindowTitle("Pixie")
+	ebiten.SetWindowIcon(ui.GetLogo())
 	if err := ebiten.RunGame(NewPixie()); err != nil {
 		log.Fatal(err)
 	}
