@@ -135,3 +135,11 @@ func (ss *SpriteSet) Describe() {
 	fmt.Fprintf(tw, "Number of Sprites\t: %d\n", len(ss.Sprites))
 	tw.Flush()
 }
+
+// Scale increases the size of the sprites by an integer multiple
+func (ss *SpriteSet) Scale(factor uint) {
+	for i, s := range ss.Sprites {
+		s.Scale(factor)
+		ss.Sprites[i] = s
+	}
+}

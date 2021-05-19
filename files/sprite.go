@@ -116,3 +116,27 @@ func (s *Sprite) UnmarshalJSON(b []byte) (err error) {
 	(*s).changed = true
 	return
 }
+
+// Scale increases the size of a sprite by an integer multiple
+func (s *Sprite) Scale(factor uint) {
+	if factor < 2 {
+		return
+	}
+	var scaled []uint8
+	i := 0
+	for y := 0; y < s.img.Stride; y++ {
+		var row []uint8
+		for x := 0; x < s.img.Stride; x++ {
+			for count := uint(0); count < factor; count++ {
+				row = append(row, s.img.Pix[i])
+			}
+			i++
+		}
+		for count := uint(0); count < factor; count++ {
+			scaled = append(scaled, row...)
+		}
+	}
+	s.img.Pix = scaled
+	s.img.Stride *= int(factor)
+	s.modified = true
+}
