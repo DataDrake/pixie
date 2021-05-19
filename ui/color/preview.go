@@ -17,6 +17,7 @@
 package color
 
 import (
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -29,7 +30,7 @@ type Preview struct {
 	x, y    int
 	fg      *ui.Box
 	bg      *ui.Box
-	palette *model.Palette
+	palette *files.Palette
 }
 
 // NewPreview creates a new Preview with the specified size and colors

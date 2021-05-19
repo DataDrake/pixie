@@ -18,7 +18,7 @@ package ui
 
 import (
 	"fmt"
-	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
@@ -30,7 +30,7 @@ type Button struct {
 	size     int
 	scale    int
 	visible  bool
-	src      *model.Sprite
+	src      *files.Sprite
 	img      *ebiten.Image
 	callback ButtonHandler
 }
@@ -39,7 +39,7 @@ type Button struct {
 type ButtonHandler func(btn ebiten.MouseButton)
 
 // NewButton creates a new empty Sprite of the specified size, scale (multiplier), and ButtonHandler
-func NewButton(img *model.Sprite, scale int, callback ButtonHandler) *Button {
+func NewButton(img *files.Sprite, scale int, callback ButtonHandler) *Button {
 	size := img.Bounds().Dx()
 	b := &Button{
 		size:     size,

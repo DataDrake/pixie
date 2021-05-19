@@ -17,6 +17,7 @@
 package sprite
 
 import (
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -30,9 +31,9 @@ type FileBar struct {
 }
 
 // NewFileBar creates a new FileBar for the Sprite Editor
-func NewFileBar(x, y int, colors *model.Palette) *FileBar {
+func NewFileBar(x, y int, colors *files.Palette) *FileBar {
 
-	editorIcons, err := model.LoadSpriteSet(asset("editor_toolbar.json"), os.O_RDONLY)
+	editorIcons, err := files.LoadSpriteSet(asset("editor_toolbar.json"), os.O_RDONLY)
 	if err != nil {
 		log.Fatal(err)
 	}

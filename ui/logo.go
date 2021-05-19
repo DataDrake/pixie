@@ -18,7 +18,7 @@ package ui
 
 import (
 	"github.com/DataDrake/pixie/assets"
-	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/files"
 	"image"
 	"log"
 	"os"
@@ -31,11 +31,11 @@ func GetLogo() []image.Image {
 	if len(logos) > 0 {
 		return logos
 	}
-	colors, err := model.LoadPalette(assets.UI("palette.json"))
+	colors, err := files.LoadPalette(assets.UI("palette.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	sprites, err := model.LoadSpriteSet(assets.UI("logo.json"), os.O_RDONLY)
+	sprites, err := files.LoadSpriteSet(assets.UI("logo.json"), os.O_RDONLY)
 	if err != nil {
 		log.Fatal(err)
 	}

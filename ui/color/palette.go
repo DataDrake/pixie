@@ -17,6 +17,7 @@
 package color
 
 import (
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -27,7 +28,7 @@ import (
 // Palette is a color picker for a Palette of colors
 type Palette struct {
 	x, y   int
-	colors *model.Palette
+	colors *files.Palette
 	grid   *ui.Grid
 }
 

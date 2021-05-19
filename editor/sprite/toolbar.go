@@ -17,7 +17,7 @@
 package sprite
 
 import (
-	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"log"
@@ -30,9 +30,9 @@ type ToolBar struct {
 }
 
 // NewToolBar creates a new ToolBar for the Sprite Editor
-func NewToolBar(x, y int, colors *model.Palette) *ToolBar {
+func NewToolBar(x, y int, colors *files.Palette) *ToolBar {
 
-	icons, err := model.LoadSpriteSet(asset("sprite_toolbar.json"), os.O_RDONLY)
+	icons, err := files.LoadSpriteSet(asset("sprite_toolbar.json"), os.O_RDONLY)
 	if err != nil {
 		log.Fatal(err)
 	}

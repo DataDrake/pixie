@@ -18,7 +18,7 @@ package sprite
 
 import (
 	"fmt"
-	"github.com/DataDrake/pixie/model"
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/ui"
 	"github.com/DataDrake/pixie/util"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -33,12 +33,12 @@ type Sprite struct {
 	visible  bool
 	selected ui.Selected
 	writable bool
-	src      *model.Sprite
+	src      *files.Sprite
 	img      *ebiten.Image
 }
 
 // NewSprite creates a new empty Sprite of the specified size, scale (multiplier), and color Palette
-func NewSprite(img *model.Sprite, writable bool, scale int) *Sprite {
+func NewSprite(img *files.Sprite, writable bool, scale int) *Sprite {
 	size := img.Bounds().Dx()
 	s := &Sprite{
 		size:     size,
@@ -88,7 +88,7 @@ func (s *Sprite) PreferredSize() (int, int) {
 }
 
 // Swap changes out the Image for this sprite with another
-func (s *Sprite) Swap(src *model.Sprite) (prev *model.Sprite) {
+func (s *Sprite) Swap(src *files.Sprite) (prev *files.Sprite) {
 	prev, s.src = s.src, src
 	s.img = ebiten.NewImageFromImage(s.src.Image())
 	return

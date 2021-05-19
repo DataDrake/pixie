@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-package model
+package files
 
 import (
 	"encoding/json"
-	"github.com/DataDrake/pixie/model/encoding"
+	"github.com/DataDrake/pixie/files/encoding"
 	"image"
 	"image/color"
 )

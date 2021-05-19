@@ -17,21 +17,15 @@
 package model
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/DataDrake/pixie/assets"
-	"github.com/DataDrake/pixie/model/encoding"
-	"image/color"
+	"github.com/DataDrake/pixie/files"
 	"log"
-	"os"
-	"text/tabwriter"
-	"time"
 )
 
-var current *Palette
+var current *files.Palette
 
 func init() {
-	palette, err := LoadPalette(assets.DefaultPalette())
+	palette, err := files.LoadPalette(assets.DefaultPalette())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,91 +34,17 @@ func init() {
 	SetPalette(palette)
 }
 
-// Palette is a color picker for a Palette of colors
-type Palette struct {
-	Name     string          `json:"name"`
-	Author   string          `json:"author"`
-	Date     time.Time       `json:"date"`
-	Revision int             `json:"revision"`
-	Colors   encoding.Colors `json:"colors"`
-	fg       int
-	bg       int
-	changed  bool
-}
-
-// LoadPalette reads a Palette from a JSON file and unmarshals it
-func LoadPalette(path string) (p *Palette, err error) {
-	p = &Palette{}
-	f, err := os.Open(path)
-	if err != nil {
-		return
-	}
-	defer f.Close()
-	dec := json.NewDecoder(f)
-	err = dec.Decode(p)
-	return
-}
-
 // SetPalette swaps the current Palette with a different one
-func SetPalette(p *Palette) {
+func SetPalette(p *files.Palette) {
 	if len(p.Colors) < 2 {
 		log.Fatal("Palettes must have at least two colors")
 	}
-	p.fg = 1
-	p.bg = 0
-	p.changed = true
+	p.SetFG(1)
+	p.SetBG(0)
 	current = p
 }
 
 // GetPalette returns the current Palette
-func GetPalette() *Palette {
+func GetPalette() *files.Palette {
 	return current
-}
-
-// HasChanged indicates that this palette has undergone changes
-func (p Palette) HasChanged() bool {
-	return p.changed
-}
-
-// Update clears the changed state
-func (p *Palette) Update() error {
-	p.changed = false
-	return nil
-}
-
-// FG returns the index and color of the foreground
-func (p Palette) FG() (index int, value color.Color) {
-	return p.fg, p.Colors[p.fg]
-}
-
-// BG returns the index and color of the background
-func (p Palette) BG() (index int, value color.Color) {
-	return p.bg, p.Colors[p.bg]
-}
-
-// SetFG changes the FG color
-func (p *Palette) SetFG(index int) {
-	if p.fg != index {
-		p.fg = index
-		p.changed = true
-	}
-}
-
-// SetBG changes the BG color
-func (p *Palette) SetBG(index int) {
-	if p.bg != index {
-		p.bg = index
-		p.changed = true
-	}
-}
-
-// Describe privides a simple description of the Palette with its Metadata
-func (p *Palette) Describe() {
-	tw := tabwriter.NewWriter(os.Stdout, 0, 4, 1, ' ', 0)
-	fmt.Fprintf(tw, "Name\t: %s\n", p.Name)
-	fmt.Fprintf(tw, "Author\t: %s\n", p.Author)
-	fmt.Fprintf(tw, "Date\t: %s\n", p.Date)
-	fmt.Fprintf(tw, "Revision\t: %d\n", p.Revision)
-	fmt.Fprintf(tw, "Number of Colors\t: %d\n", len(p.Colors))
-	tw.Flush()
 }

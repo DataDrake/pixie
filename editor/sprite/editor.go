@@ -18,6 +18,7 @@ package sprite
 
 import (
 	"github.com/DataDrake/pixie/assets"
+	"github.com/DataDrake/pixie/files"
 	"github.com/DataDrake/pixie/model"
 	"github.com/DataDrake/pixie/ui/color"
 	"github.com/DataDrake/pixie/ui/sprite"
@@ -45,7 +46,7 @@ func asset(path string) string {
 // NewEditor creates a new Sprite Editor and populates its GUI
 func NewEditor() *Editor {
 
-	colors, err := model.LoadPalette(assets.UI("palette.json"))
+	colors, err := files.LoadPalette(assets.UI("palette.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
